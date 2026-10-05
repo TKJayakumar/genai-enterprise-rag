@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Enterprise RAG Platform — Local Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Source+Sans+3:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <h1>Enterprise RAG Platform</h1>
+          <p class="tag">knowledge, governed and cited — local build</p>
+        </div>
+      </div>
+      <div class="mode-pill" id="modePill">checking mode…</div>
+    </header>
+
+    <main class="grid">
+      <!-- LEFT: chat -->
+      <section class="panel chat-panel">
+        <div class="panel-head">
+          <h2>Ask the assistant</h2>
+          <select id="userSelect" aria-label="Simulated user"></select>
+        </div>
+
+        <div class="messages" id="messages">
+          <div class="msg system">
+            Pick a user role above, then ask a question. Try:
+            <em>"What is our remote work reimbursement policy?"</em> or
+            <em>"What's the Q3 budget variance?"</em> (only Finance/Exec can see that one).
+            You can also upload your own PDF/DOCX/TXT/MD files below — they're indexed right away
+            and answered from just like the sample documents.
+          </div>
+        </div>
+
+        <form id="queryForm" class="query-form">
+          <input id="queryInput" type="text" placeholder="Ask a question about company knowledge…" autocomplete="off" required />
+          <button type="submit">Ask</button>
+        </form>
+      </section>
+
+      <!-- RIGHT: live pipeline trace -->
+      <section class="panel trace-panel">
+        <div class="panel-head">
+          <h2>Orchestration trace</h2>
+          <span class="hint">node-by-node execution path</span>
+        </div>
+        <ol class="trace" id="trace">
+          <li class="trace-empty">Run a query to see the pipeline execute — Knowledge Retrieval → Classifier/Router → Access Check → Generate → Guardrail → Output.</li>
+        </ol>
+      </section>
+    </main>
+
+    <section class="kb-strip">
+      <div class="kb-head">
+        <h3>Knowledge base — upload documents</h3>
+        <span class="hint">.pdf, .docx, .txt, .md — indexed immediately, tagged with department + who can see it</span>
+      </div>
+
+      <form id="uploadForm" class="upload-form">
+        <input id="uploadFile" type="file" accept=".pdf,.docx,.txt,.md" required />
+        <select id="uploadDept" aria-label="Department"></select>
+        <div class="roles-group" id="uploadRoles" aria-label="Access roles"></div>
+        <button type="submit">Upload &amp; index</button>
+      </form>
+      <div class="upload-status" id="uploadStatus"></div>
+
+      <div class="kb-table-wrap">
+        <table id="docsTable">
+          <thead>
+            <tr><th>Title</th><th>Department</th><th>Visible to</th><th>Chunks</th><th>Storage</th><th>Uploaded</th><th></th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="audit-strip">
+      <div class="audit-head">
+        <h3>Governance &amp; audit log</h3>
+        <button id="refreshAudit" type="button">Refresh</button>
+      </div>
+      <div class="audit-table-wrap">
+        <table id="auditTable">
+          <thead>
+            <tr><th>Time (UTC)</th><th>User</th><th>Role</th><th>Query</th><th>Status</th><th>Citations</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
